@@ -3,15 +3,14 @@ title: yuvaly0's blog # site title
 lang: en-US
 timezone: Asia/Jerusalem
 image: assets/img/ogp.png
-repo: https://github.com/piharpi/jekyll-klise
+repo: https://github.com/yuvaly0/yuvaly0.github.io
 mode: dark
 
 # Profile settings
 author:
   name: Yuvaly0 
   
-  github: 
-  username: yuvaly0  
+  username: yuvaly0
   email: yuvalyohanan3@gmail.com
   avatar: /assets/img/avatar.jpg
 
