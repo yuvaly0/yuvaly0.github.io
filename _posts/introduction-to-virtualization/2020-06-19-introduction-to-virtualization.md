@@ -111,7 +111,7 @@ The hypervisor should be able to keep track of the state that the guest OS think
 
 A software-assisted solution is a __Shadow Page Tables__, its purpose is to map from GVA to MPA, so for each VM, the hypervisor will create a table of this kind. ??
 
-![](/assets/introduction-to-virtualization/shadow_page_tables.png)
+| ![](/assets/introduction-to-virtualization/shadow_page_tables.png) |
 |:--:|
 | *https://www.anandtech.com/show/2480/10* |
 
@@ -130,7 +130,7 @@ Each fault or hypercall (the special calls in the para-virtualized environment) 
 
 Nowadays these types of solutions (software-assisted)  are not recommended due to the number of hypervisor traps (e.g VM Exit and VM Entry) they have caused.
 
-![](/assets/introduction-to-virtualization/vmm_life_cycle.png)
+| ![](/assets/introduction-to-virtualization/vmm_life_cycle.png) |
 |:--:|
 | *Life Cycle of VMM Software - https://rayanfam.com/topics/hypervisor-from-scratch-part-1/* |
 
@@ -142,7 +142,7 @@ If the address was not found in the TLB, will go threw the EPT tables.
 
 Tough VM Exit can still occur if the EPT cannot translate a GPA. Such an occasion should be infrequent.
 
-![](/assets/introduction-to-virtualization/ept_tlb.png)
+| ![](/assets/introduction-to-virtualization/ept_tlb.png) |
 |:--:|
 | *https://www.anandtech.com/show/2480/10* |
 
