@@ -50,10 +50,10 @@ At the time, the purpose of the work was to get the awareness that new architect
 If we will look at the types of hypervisors, we can distinguish between 2 types.
 The first one is called Type 1 and the second Type 2 :)
 
-<figure>
-<img src="images/hypervisors_types.png" alt="hypervisors types">
-<figcaption>Figure 7-1. Modern Operating Systems Fourth Edition, Page 478</figcaption>
-</figure>
+| ![alt text](images/hypervisors_types.png "Hypervisors types") |
+|:--:|
+| *Figure 7-1. Modern Operating Systems Fourth Edition, Page 478* |
+
 
 Let us look at the first type, we can see that the hypervisor was installed directly on the hardware and above it was a number of operating systems. 
 So in Type 1, the Hypervisor is also called “bare metal” because it is not installed directly on the hardware.
