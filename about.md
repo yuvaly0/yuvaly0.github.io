@@ -4,7 +4,7 @@ permalink: /about/
 layout: page
 ---
 
-A kid from israel
+Its not over until I win
 
 ##### may u needs ✨
 
