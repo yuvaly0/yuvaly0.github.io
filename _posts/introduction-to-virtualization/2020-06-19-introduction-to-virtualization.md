@@ -98,10 +98,10 @@ __Direct execution__ -   This simply means that you run “natively” (without 
 
 ## Memory Virtualization
 
-__GVA__ - guest virtual address
-__GPA__ - guest physical address
-__MVA__ - machine virtual address
-__MPA__ - machine physical address
+__GVA__ - guest virtual address  
+__GPA__ - guest physical address  
+__MVA__ - machine virtual address  
+__MPA__ - machine physical address  
 
 An arbitrary program inside VM A allocates virtual pages 5 and 6, The hypervisor then maps them to host physical pages 7 and 8, after that another VM wants to allocate pages, How can the hypervisor know which pages are to which VM?
 
@@ -112,6 +112,7 @@ The hypervisor should be able to keep track of the state that the guest OS think
 A software-assisted solution is __Shadow Page Tables__, its purpose is to map from GVA to MPA, so for each VM, the hypervisor will create a table of this kind.
 
 | ![alternat text](/assets/introduction-to-virtualization/shadow_page_tables.png) |
+| ![alternat text](/assets/introduction-to-virtualization/vmx.png) |
 |:--:|
 | *https://www.anandtech.com/show/2480/10* |
 
