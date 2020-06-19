@@ -1,5 +1,5 @@
 ---
-title: Colophon
+title: About
 permalink: /about/
 layout: page
 ---
@@ -8,5 +8,5 @@ A kid from israel
 
 ##### may u needs ✨
 
-- twitter.com/{{ site.authoe.username }}
+- twitter.com/{{ site.author.username }}
 - github.com/{{ site.author.username }}
