@@ -51,7 +51,7 @@ If we will look at the types of hypervisors, we can distinguish between 2 types.
 The first one is called Type 1 and the second Type 2 :)
 
 
-| ![alter text](images/hypervisor_types.png) |
+| ![altern text](../assets/introduction-to-virtualization/hypervisor_types.png) |
 |:--:|
 | *Figure 7-1. Modern Operating Systems Fourth Edition, Page 478* |
 
