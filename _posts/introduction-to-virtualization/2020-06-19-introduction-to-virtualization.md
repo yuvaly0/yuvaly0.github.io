@@ -5,7 +5,7 @@ modified: 2020-06-19 17:30:47 +07:00
 tags: [virtualization]
 ---
 
-# Introduction To Virtualization
+# Introduction
 
 In this article, I hope to show you the basics of virtualization summarized in one place, in the recent time I searched for a new research topic and it came to my mind that I don't know very much about virtualization and about what goes on when I turn on my ubuntu VM in VMware Workstation.
 
@@ -33,8 +33,8 @@ Sounds cool but the idea has been here since the ’60s, if we look at the main 
 In 1974 two computer scientists, Gerald Popek and Robert Goldberg, published a seminal paper called “Formal Requirements for Virtualizable Third Generation Architectures” That provides the required information to between other things build a proper VMM by their prerequisites, in that context they defined three properties of interest.
 
 
-* __Efficiency__ - all of the innocuous instructions are to be executed by the VMM, without any intervention at all from the VMM. (in contrast to Bochs which emulates all the underlying hardware and each instruction execution causes a number of procedures to update the inner data structures that represent the mentioned hardware) 
-* __Resource Control__ - an arbitrary program running in the context of the VMM should not be able to affect the machine itself or other VM’s system resources, i.e, memory available to it, in this case, the allocator of the VMM should be invoked. (one VM should not be able to affect the TLB of the machine)
+* __Efficiency__ - all of the innocuous instructions are to be executed by the hardware, without any intervention at all from the VMM. (in contrast to Bochs which emulates all the underlying hardware and each instruction execution causes a number of procedures to update the inner data structures that represent the mentioned hardware) 
+* __Resource Control__ - an arbitrary program running in the context of the VMM should not be able to affect the machine itself or other VM’s system resources, i.e, memory available to it, in this case, the allocator of the VMM should be invoked. (one VM should not be able to affect the page tables of the machine)
 * __Equivalence__ - programs running inside a VM should be executing in a manner that is indistinguishable to a machine where the VMM is not resident, except for timing issues effected by resource availability problem, e.g, the allocator of the vmm could not currently satisfy the specific request for the VM, something that can happen often because the vmm itself takes some part of the VM address space.
 	
 
@@ -57,7 +57,7 @@ The first one is called Type 1 and the second Type 2 :)
 
 
 Let us look at the first type, we can see that the hypervisor was installed directly on the hardware and above it was a number of operating systems. 
-So in Type 1, the Hypervisor is also called “bare metal” because it is not installed directly on the hardware.
+So in Type 1, the Hypervisor is also called “bare metal” because it is installed directly on the hardware.
 For example, Microsoft Hyper-V is a Type 1 Hypervisor.
 
 If we will look at the second type of the hypervisor, we will see that it differentiates from the first type in several things, first of all, it is installed on top of an existing operating system, so no more bare metal and second is that there are other processes that run in the same level at the hypervisor.
@@ -73,14 +73,14 @@ So VMware only appears to be a user-mode process, when in fact he installs a dri
 
 After we can distinguish between the two different types of hypervisors, It’ll be a good idea to be able to know the types of virtualization.
 
-There are three types of virtualization: Full virtualization, Paravirtualization, and Hardware-Assisted Virtualization (HVM).
+There are three types of virtualization: Full virtualization, Paravirtualization, and Hardware-Assisted Virtualization (HAV).
 
 * __Full Virtualization__ -  Full virtualization provides the concept of virtualization as we know it but without changing the guest OS, it does it by using a technique called “binary translation” (explained below in “Techniques for virtualization”).
 
-* __Para-virtualization__ -  In this technique, the guest OS kernel is modified to be able to run on top of a hypervisor and to be aware of its existence, of course, this change was meant to be able to run faster, but it comes with a price due to the fact that you cannot run arbitrary operating systems anymore because the OS you'll install will have to have paravirtualization-aware drivers, one such hypervisor, for example, is “Xen 1.0”
+* __Para-virtualization__ -  In this technique, the guest OS kernel is modified to be aware of its existence (using special calls called hypercalls), of course, this change was meant to be able to run faster, but it comes with a price due to the fact that you cannot run arbitrary operating systems anymore because the OS you'll install will have to have paravirtualization-aware drivers, one such hypervisor, for example, is “Xen 1.0”
 
-* __Hardware-Assisted__ Virtualization -  This type presented a new approach, if in paravirtualization you had to change the guest OS kernel, here you need to have special hardware,  for example, extra instructions to the ISA.
-This technique is common nowadays in modern hypervisors, for instance, Hyper-V.
+* __Hardware-Assisted Virtualization__ -  This type presented a new approach, if in paravirtualization you had to change the guest OS kernel, here you need to have special hardware,  for example, extra instructions to the ISA.
+This technique is common nowadays in modern hypervisors, for instance, Microsoft Hyper-V.
 
 ## Techniques for virtualization
 
@@ -105,7 +105,7 @@ __MPA__ - machine physical address
 
 An arbitrary program inside VM A allocates virtual pages 5 and 6, The hypervisor then maps them to host physical pages 7 and 8, after that another VM wants to allocate pages, How can the hypervisor know which pages are to which VM?
 
-We want to find a way to be able to map the guest virtual pages with the host physical pages without overwriting other VM’s pages, basically manage it like its a real computer.
+We want to find a way to be able to map the guest virtual pages with the host physical pages without overwriting other VM’s pages, basically manage it like its a real computer and each VM is like a process.
 
 The hypervisor should be able to keep track of the state that the guest OS thinks its at, in terms of memory.
 
@@ -122,9 +122,9 @@ The guest OS could change its mappings by just writing to memory, without any se
 
 So how could the hypervisor know if something has changed within the guest OS page tables?
 
-A dummy solution in a full virtualized environment would be for the hypervisor to map the guest page tables as read-only, thus causing page fault in each access which will be trapped to the hypervisor to handle and update the shadow page table.
+A dummy solution in a Full-virtualized environment would be for the hypervisor to map the guest page tables as read-only, thus causing page fault in each access which will be trapped to the hypervisor to handle and update the shadow page table.
 
-In a Paravirtualized environment, the guest could just let the hypervisor know after he finished changing the page table, after all, he is aware of its existence. 
+In a Para-virtualized environment, the guest could just let the hypervisor know after he finished changing the page table, after all, he is aware of its existence. 
 
 Each fault or hypercall (the special calls in the para-virtualized environment) causes a “VM Exit” which is an instruction that makes the hypervisor to regain control, the hypervisor should save a lot of data (e.g VMCS data structure) and includes losing the address caching by flushing the TLB, in the end, we will need to revert the steps by calling a “VM Entry”, (i.e load the VMCS) it could be up to tens of thousands of cycles.
 
@@ -138,9 +138,9 @@ __Hardware-assisted paging (Intel’s Extended Page Tables)__ - In order to redu
 
 An upside for using EPT over Shadow Page Tables is that in EPT the TLB gets an added responsibility and has the GVA to GPA and the MVA to MPA translation, the TLB has a new VM specific tag called Address Space IDentifier (ASID). With this tag, the TLB can now keep track of which TLB entry is to which VM which will result in that we don’t need to flush the TLB for each VM Exit, the TLB entries can coexist.
 
-If the address was not found in the TLB, will go threw the EPT tables.
+If the address was not found in the TLB, it will go threw the EPT tables.
 
-Tough VM Exit can still occur if the EPT cannot translate a GPA. Such an occasion should be infrequent.
+Tough VM Exit can still occur if the EPT cannot translate a GPA. Such an occasion is infrequent.
 
 | ![alternat text](/assets/introduction-to-virtualization/ept_tlb.gif) |
 |:--:|
