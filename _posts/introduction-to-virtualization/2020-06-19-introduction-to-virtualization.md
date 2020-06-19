@@ -12,7 +12,7 @@ In this article, I hope to show you the basics of virtualization summarized in o
 First I’ll go through why we would want to use it, some history about the topic, the different types of virtualization and hypervisors, and a couple of techniques for efficient virtualization and to sum up, a little about memory virtualization.
 
 
-## Why Should we use it
+## Why Should We Use It
 
 Let's say that we have a company that serves multiple services, and each of those services needs to run on a different operating system, it's not such an abnormal scenario.
 For us to work properly we should have multiple physical computers and on each of them install the wanted operating system, and on them install our wanted programs. 
@@ -69,7 +69,7 @@ Which is the VMware process, but behind the scenes he’s cooperating with the V
 So VMware only appears to be a user-mode process, when in fact he installs a driver and communicates with it.
 
 
-## Types of Virtualization
+## Types Of Virtualization
 
 After we can distinguish between the two different types of hypervisors, It’ll be a good idea to be able to know the types of virtualization.
 
@@ -82,7 +82,7 @@ There are three types of virtualization: Full virtualization, Paravirtualization
 * __Hardware-Assisted Virtualization__ -  This type presented a new approach, if in paravirtualization you had to change the guest OS kernel, here you need to have special hardware,  for example, extra instructions to the ISA.
 This technique is common nowadays in modern hypervisors, for instance, Microsoft Hyper-V.
 
-## Techniques for virtualization
+## Techniques For Virtualization
 
 We can distinguish between a couple of techniques for virtualization.
 The difference will be in when and how we tell the hypervisor, because after all if there is an instruction that needs to be translated before running it will be translated.
