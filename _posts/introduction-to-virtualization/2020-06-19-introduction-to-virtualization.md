@@ -111,8 +111,7 @@ The hypervisor should be able to keep track of the state that the guest OS think
 
 A software-assisted solution is __Shadow Page Tables__, its purpose is to map from GVA to MPA, so for each VM, the hypervisor will create a table of this kind.
 
-| ![alternat text](/assets/introduction-to-virtualization/shadow_page_tables.png) |
-| ![alternat text](/assets/introduction-to-virtualization/vmx.png) |
+| ![alternat text](/assets/introduction-to-virtualization/shadow_page_tables.gif) |
 |:--:|
 | *https://www.anandtech.com/show/2480/10* |
 
@@ -143,7 +142,7 @@ If the address was not found in the TLB, will go threw the EPT tables.
 
 Tough VM Exit can still occur if the EPT cannot translate a GPA. Such an occasion should be infrequent.
 
-| ![alternat text](/assets/introduction-to-virtualization/ept_tlb.png) |
+| ![alternat text](/assets/introduction-to-virtualization/ept_tlb.gif) |
 |:--:|
 | *https://www.anandtech.com/show/2480/10* |
 
