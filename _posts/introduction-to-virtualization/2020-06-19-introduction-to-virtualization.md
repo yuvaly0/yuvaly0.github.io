@@ -50,7 +50,7 @@ At the time, the purpose of the work was to get the awareness that new architect
 If we will look at the types of hypervisors, we can distinguish between 2 types.
 The first one is called Type 1 and the second Type 2 :)
 
-| ![alt text](images/hypervisors_types.png "Hypervisors types") |
+| ![alt text](images/hypervisor_types.png "Hypervisors types check") |
 |:--:|
 | *Figure 7-1. Modern Operating Systems Fourth Edition, Page 478* |
 
