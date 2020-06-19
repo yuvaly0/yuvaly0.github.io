@@ -51,7 +51,7 @@ If we will look at the types of hypervisors, we can distinguish between 2 types.
 The first one is called Type 1 and the second Type 2 :)
 
 
-| ![alternativ text](/assets/introduction-to-virtualization/hypervisor_types.png) |
+| ![alt text](/assets/introduction-to-virtualization/hypervisor_types.png) |
 |:--:|
 | *Figure 7-1. Modern Operating Systems Fourth Edition, Page 478* |
 
@@ -63,9 +63,7 @@ For example, Microsoft Hyper-V is a Type 1 Hypervisor.
 If we will look at the second type of the hypervisor, we will see that it differentiates from the first type in several things, first of all, it is installed on top of an existing operating system, so no more bare metal and second is that there are other processes that run in the same level at the hypervisor.
 The second thing is not completely true, let’s take for example VMware, which has a type 2 hypervisor, between other ones, VMware workstation, if you’ll run a VM instance you will see a process named VMX.
 
-| ![alternat text](images/vmx.png) |
-|:--:|
-| *Figure 7-1. Modern Operating Systems Fourth Edition, Page 478* |
+| ![alternat text](/assets/introduction-to-virtualization/vmx.png) |
 
 Which is the VMware process, but behind the scenes he’s cooperating with the VMM driver.
 So VMware only appears to be a user-mode process, when in fact he installs a driver and communicates with it.
@@ -113,7 +111,9 @@ The hypervisor should be able to keep track of the state that the guest OS think
 
 A software-assisted solution is a __Shadow Page Tables__, its purpose is to map from GVA to MPA, so for each VM, the hypervisor will create a table of this kind. ??
 
-![](images/shadow_page_tables.png)
+![](/assets/introduction-to-virtualization/shadow_page_tables.png)
+|:--:|
+| *https://www.anandtech.com/show/2480/10* |
 
 The guest OS could change its mappings by just writing to memory, without any sensitive operations, so the hypervisor is not aware of the change and the shadow page table is not synced and then we lost its purpose.
 
@@ -130,7 +130,9 @@ Each fault or hypercall (the special calls in the para-virtualized environment) 
 
 Nowadays these types of solutions (software-assisted)  are not recommended due to the number of hypervisor traps (e.g VM Exit and VM Entry) they have caused.
 
-![](images/vmm_life_cycle.png)
+![](/assets/introduction-to-virtualization/vmm_life_cycle.png)
+|:--:|
+| *Life Cycle of VMM Software - https://rayanfam.com/topics/hypervisor-from-scratch-part-1/* |
 
 __Hardware-assisted paging (Intel’s Extended Page Tables)__ - In order to reduce the overhead caused by Software-assisted paging (i.e hypervisor traps) Intel’s strategy is __EPT__ which will improve performance.
 
@@ -140,6 +142,8 @@ If the address was not found in the TLB, will go threw the EPT tables.
 
 Tough VM Exit can still occur if the EPT cannot translate a GPA. Such an occasion should be infrequent.
 
-![](images/ept_tlb.png)
+![](/assets/introduction-to-virtualization/ept_tlb.png)
+|:--:|
+| *https://www.anandtech.com/show/2480/10* |
 
 
