@@ -33,9 +33,9 @@ Sounds cool but the idea has been here since the ’60s, if we look at the main 
 In 1974 two computer scientists, Gerald Popek and Robert Goldberg, published a seminal paper called “Formal Requirements for Virtualizable Third Generation Architectures” That provides the required information to between other things build a proper VMM by their prerequisites, in that context they defined three properties of interest.
 
 
-	__Efficiency__ - all of the innocuous instructions are to be executed by the VMM, without any intervention at all from the VMM. (in contrast to Bochs which emulates all the underlying hardware and each instruction execution causes a number of procedures to update the inner data structures that represent the mentioned hardware) 
-	__Resource Control__ - an arbitrary program running in the context of the VMM should not be able to affect the machine itself or other VM’s system resources, i.e, memory available to it, in this case, the allocator of the VMM should be invoked. (one VM should not be able to affect the TLB of the machine)
-	__Equivalence__ - programs running inside a VM should be executing in a manner that is indistinguishable to a machine where the VMM is not resident, except for timing issues effected by resource availability problem, e.g, the allocator of the vmm could not currently satisfy the specific request for the VM, something that can happen often because the vmm itself takes some part of the VM address space.
+* __Efficiency__ - all of the innocuous instructions are to be executed by the VMM, without any intervention at all from the VMM. (in contrast to Bochs which emulates all the underlying hardware and each instruction execution causes a number of procedures to update the inner data structures that represent the mentioned hardware) 
+* __Resource Control__ - an arbitrary program running in the context of the VMM should not be able to affect the machine itself or other VM’s system resources, i.e, memory available to it, in this case, the allocator of the VMM should be invoked. (one VM should not be able to affect the TLB of the machine)
+* __Equivalence__ - programs running inside a VM should be executing in a manner that is indistinguishable to a machine where the VMM is not resident, except for timing issues effected by resource availability problem, e.g, the allocator of the vmm could not currently satisfy the specific request for the VM, something that can happen often because the vmm itself takes some part of the VM address space.
 	
 
 Popek and Goldberg also suggested two groups of instructions, __sensitive__ and __privileged instructions__, the first kind of instructions is the kind that behaves differently in user and kernel mode, such as doing I/O or changing MMU settings. Privileged instructions are instructions that if occurred at user-mode, the CPU should trap.
@@ -50,7 +50,10 @@ At the time, the purpose of the work was to get the awareness that new architect
 If we will look at the types of hypervisors, we can distinguish between 2 types.
 The first one is called Type 1 and the second Type 2 :)
 
-![bla](images/hypervisor_types.png)
+<figure>
+<img src="/introduction-to-virtualization/images/hypervisors_types.png" alt="hypervisors types">
+<figcaption>Figure 7-1. Modern Operating Systems Fourth Edition, Page 478</figcaption>
+</figure>
 
 Let us look at the first type, we can see that the hypervisor was installed directly on the hardware and above it was a number of operating systems. 
 So in Type 1, the Hypervisor is also called “bare metal” because it is not installed directly on the hardware.
@@ -71,11 +74,11 @@ After we can distinguish between the two different types of hypervisors, It’ll
 
 There are three types of virtualization: Full virtualization, Paravirtualization, and Hardware-Assisted Virtualization (HVM).
 
-__Full Virtualization__ -  Full virtualization provides the concept of virtualization as we know it but without changing the guest OS, it does it by using a technique called “binary translation” (explained below in “Techniques for virtualization”).
+* __Full Virtualization__ -  Full virtualization provides the concept of virtualization as we know it but without changing the guest OS, it does it by using a technique called “binary translation” (explained below in “Techniques for virtualization”).
 
-__Para-virtualization__ -  In this technique, the guest OS kernel is modified to be able to run on top of a hypervisor and to be aware of its existence, of course, this change was meant to be able to run faster, but it comes with a price due to the fact that you cannot run arbitrary operating systems anymore because the OS you'll install will have to have paravirtualization-aware drivers, one such hypervisor, for example, is “Xen 1.0”
+* __Para-virtualization__ -  In this technique, the guest OS kernel is modified to be able to run on top of a hypervisor and to be aware of its existence, of course, this change was meant to be able to run faster, but it comes with a price due to the fact that you cannot run arbitrary operating systems anymore because the OS you'll install will have to have paravirtualization-aware drivers, one such hypervisor, for example, is “Xen 1.0”
 
-__Hardware-Assisted__ Virtualization -  This type presented a new approach, if in paravirtualization you had to change the guest OS kernel, here you need to have special hardware,  for example, extra instructions to the ISA.
+* __Hardware-Assisted__ Virtualization -  This type presented a new approach, if in paravirtualization you had to change the guest OS kernel, here you need to have special hardware,  for example, extra instructions to the ISA.
 This technique is common nowadays in modern hypervisors, for instance, Hyper-V.
 
 ## Techniques for virtualization
@@ -124,7 +127,7 @@ Each fault or hypercall (the special calls in the para-virtualized environment) 
 
 Nowadays these types of solutions (software-assisted)  are not recommended due to the number of hypervisor traps (e.g VM Exit and VM Entry) they have caused.
 
-![](images/vmm_life_cycle)
+![](images/vmm_life_cycle.png)
 
 __Hardware-assisted paging (Intel’s Extended Page Tables)__ - In order to reduce the overhead caused by Software-assisted paging (i.e hypervisor traps) Intel’s strategy is __EPT__ which will improve performance.
 
