@@ -51,7 +51,7 @@ If we will look at the types of hypervisors, we can distinguish between 2 types.
 The first one is called Type 1 and the second Type 2 :)
 
 
-| ![alterna text](hypervisor_types.png) |
+| ![alternati text](/_posts/introduction-to-virtualization/hypervisor_types.png) |
 |:--:|
 | *Figure 7-1. Modern Operating Systems Fourth Edition, Page 478* |
 
@@ -63,7 +63,9 @@ For example, Microsoft Hyper-V is a Type 1 Hypervisor.
 If we will look at the second type of the hypervisor, we will see that it differentiates from the first type in several things, first of all, it is installed on top of an existing operating system, so no more bare metal and second is that there are other processes that run in the same level at the hypervisor.
 The second thing is not completely true, let’s take for example VMware, which has a type 2 hypervisor, between other ones, VMware workstation, if you’ll run a VM instance you will see a process named VMX.
 
-![](images/vmx.png)
+| ![alternat text](images/vmx.png) |
+|:--:|
+| *Figure 7-1. Modern Operating Systems Fourth Edition, Page 478* |
 
 Which is the VMware process, but behind the scenes he’s cooperating with the VMM driver.
 So VMware only appears to be a user-mode process, when in fact he installs a driver and communicates with it.
