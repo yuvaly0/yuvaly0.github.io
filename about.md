@@ -8,5 +8,5 @@ Its not over until I win
 
 ##### may u needs ✨
 
-- twitter.com/{{ site.author.username }}
-- github.com/{{ site.author.username }}
+- [Twitter](https://twitter.com/yuvaly0)
+- [Github](https://github.com/yuvaly0)
