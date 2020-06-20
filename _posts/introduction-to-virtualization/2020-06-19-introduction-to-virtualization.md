@@ -7,7 +7,8 @@ tags: [virtualization]
 
 # Introduction
 
-In this article, I hope to show you the basics of virtualization summarized in one place, in the recent time I searched for a new research topic and it came to my mind that I don't know very much about virtualization and about what goes on when I turn on my ubuntu VM in VMware Workstation.
+In this article, I hope to show you the basics of virtualization summarized in one place.
+In the recent time I searched for a new research topic and it came to my mind that I don't know very much about virtualization and about what goes on when I turn on my ubuntu VM in VMware Workstation.
 
 First I’ll go through why we would want to use it, some history about the topic, the different types of virtualization and hypervisors, and a couple of techniques for efficient virtualization and to sum up, a little about memory virtualization.
 
@@ -73,13 +74,13 @@ So VMware only appears to be a user-mode process, when in fact he installs a dri
 
 After we can distinguish between the two different types of hypervisors, It’ll be a good idea to be able to know the types of virtualization.
 
-There are three types of virtualization: Full virtualization, Paravirtualization, and Hardware-Assisted Virtualization (HAV).
+There are three types of virtualization: Full virtualization, Para-virtualization, and Hardware-Assisted Virtualization (HAV).
 
-* __Full Virtualization__ -  Full virtualization provides the concept of virtualization as we know it but without changing the guest OS, it does it by using a technique called “binary translation” (explained below in “Techniques for virtualization”).
+* __Full Virtualization__ -  It provides the concept of virtualization as we know it but without changing the guest OS, it does it by using a technique called “binary translation” (explained below in “Techniques for virtualization”).
 
-* __Para-virtualization__ -  In this technique, the guest OS kernel is modified to be aware of its existence (using special calls called hypercalls), of course, this change was meant to be able to run faster, but it comes with a price due to the fact that you cannot run arbitrary operating systems anymore because the OS you'll install will have to have paravirtualization-aware drivers, one such hypervisor, for example, is “Xen 1.0”
+* __Para-virtualization__ -  In this technique, the guest OS kernel is modified to be aware of its existence (using special calls called hypercalls), of course, this change was meant to be able to run faster, but it comes with a price due to the fact that you cannot run arbitrary operating systems anymore because the OS you'll install will have to have Para-virtualization-aware drivers, one such hypervisor, for example, is “Xen 1.0”
 
-* __Hardware-Assisted Virtualization__ -  This type presented a new approach, if in paravirtualization you had to change the guest OS kernel, here you need to have special hardware,  for example, extra instructions to the ISA.
+* __Hardware-assisted Virtualization__ -  This type presented a new approach, if in Para-virtualization you had to change the guest OS kernel, here you need to have special hardware,  for example, extra instructions to the ISA.
 This technique is common nowadays in modern hypervisors, for instance, Microsoft Hyper-V.
 
 ## Techniques For Virtualization
@@ -126,7 +127,7 @@ A dummy solution in a Full-virtualized environment would be for the hypervisor t
 
 In a Para-virtualized environment, the guest could just let the hypervisor know after he finished changing the page table, after all, he is aware of its existence. 
 
-Each fault or hypercall (the special calls in the para-virtualized environment) causes a “VM Exit” which is an instruction that makes the hypervisor to regain control, the hypervisor should save a lot of data (e.g VMCS data structure) and includes losing the address caching by flushing the TLB, in the end, we will need to revert the steps by calling a “VM Entry”, (i.e load the VMCS) it could be up to tens of thousands of cycles.
+Each fault or hypercall (the special calls in the Para-virtualized environment) causes a “VM Exit” which is an instruction that makes the hypervisor to regain control, the hypervisor should save a lot of data (e.g VMCS data structure) and includes losing the address caching by flushing the TLB, in the end, we will need to revert the steps by calling a “VM Entry”, (i.e load the VMCS) it could be up to tens of thousands of cycles.
 
 Nowadays these types of solutions (software-assisted)  are not recommended due to the number of hypervisor traps (e.g VM Exit and VM Entry) they have caused.
 
