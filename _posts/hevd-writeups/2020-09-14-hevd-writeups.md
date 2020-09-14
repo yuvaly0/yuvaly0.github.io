@@ -16,26 +16,19 @@ We are interested in the function `TriggerDoubleFetch`.
 
 | ![could not load photo](/assets/hevd-writeups/double_fetch_function_analysis.png) |
 
-First of all we are getting some data from the function, for instance, the size of the kernel buffer
-
-Then a check is made, the size of we supplied vs the size of the kernel buffer size in order to prevent overflow
-
+First of all the function prints for us some data.
+Then a check is made, the size that we supplied vs the size of the kernel buffer size in order to prevent overflow
 If we passed the check our buffer is copied to kernel buffer using memcpy and the size we sent.
-
-Beacause the function uses our "fetches" the size twice we have a window of oppurtunities to change it's value.
-
-`esi is our passed paramater`
+Beacause the function "fetches" the size twice we have a window of oppurtunities to change it's value.
 So if we look again at what we can achive, we can get OOB(out of bounds) write on the stack.
 
 #### Explotation
 
-In this section I'll explain how to exploit the bug we saw earliar, I will only use parts of my code, I'll link to the full exploit in the end
-
 Ok, so we want two things two things to happen
 1. Change the value before its use and after the check. 
-2. Use the OOB write to jump to an address of our choosing - will be done with changing the size were sending
+2. Jump to an arbitrary address of our choosing
 
-So in theory we will run two threads, one that will repetadly engage with the driver and will trigger a double fetch vulnerability and another to change the value of the size being sent.
+So we will run two threads, one that will repeatedly engage with the driver and will trigger a double fetch vulnerability and another to change the value of the size being sent.
 
 Ok, lets create two threads and attach our functions
 | ![could not load photo](/assets/hevd-writeups/double_fetch_create_threads.png) |
