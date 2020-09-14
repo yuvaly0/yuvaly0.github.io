@@ -54,3 +54,6 @@ Another thing we can do is set each of our threads to a different processor, so 
 where i represents the location of a bit in a bitmask that represents the processor number (i == 0 -> first processor)
 
 ofcourse, we will set by our machine capabillities or the call will fail.
+
+
+[full source code](https://github.com/yuvaly0/HEVD_Solutions/blob/master/HEVD_Solutions/DoubleFetch.cpp)
