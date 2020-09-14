@@ -6,7 +6,7 @@ tags: [windows, kernel, hevd]
 ---
 ## Double Fetch
 This kind of bug happens when the user supplied data is fetched twice, for example, there is a ioctl that recives an array of
-chars and its length, if the function will check the size and second will copy using it (the exact same reference to the variable).
+chars and its length, if the function will check the size and will copy using it (the exact same reference to the variable).
 It will expose itself to the double-fetch bug.
 
 This is also called TOC-TOU, TimeOfCheck and TimeOfUse, when you are fetching this value for the second time you are exposing yourself to the fact that the user will be able to change this data between the check and acatual use thus the vulnerability.
@@ -18,8 +18,8 @@ We are interested in the function `TriggerDoubleFetch`.
 
 First of all the function prints for us some data.
 Then a check is made, the size that we supplied vs the size of the kernel buffer size in order to prevent overflow
-If we passed the check our buffer is copied to kernel buffer using memcpy and the size we sent.
-Beacause the function "fetches" the size twice we have a window of oppurtunities to change it's value.
+If we passed the check, our buffer is copied to kernel buffer using memcpy and the size we sent.
+The fact that the function "fetches" the size twice we have a window of oppurtunities to change it's value.
 So if we look again at what we can achive, we can get OOB(out of bounds) write on the stack.
 
 #### Explotation
@@ -51,7 +51,7 @@ Now we can run the exploit with success
 Another thing we can do is set each of our threads to a different processor, so he will not be competing with the our second thread about the processor resources
 ![could not load photo](/assets/hevd-writeups/double_fetch_set_processor.png) 
 
-where i represents the location of a bit in a bitmask that represents the processor number (i == 0 -> first processor)
+where i represents the location of a bit in a bitmask that represents the processor number</br> (i == 0 -> first processor)
 
 ofcourse, we will set by our machine capabillities or the call will fail.
 
