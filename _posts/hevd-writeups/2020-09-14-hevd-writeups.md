@@ -1,17 +1,15 @@
 ---
-title: Introduction To Virtualization
+title: HEVD writeups
 date: 2020-09-14 17:30:47 +07:00
 modified: 2020-09-14 17:30:47 +07:00
-tags: [windows-kernel, hevd]
+tags: [windows, kernel, hevd]
 ---
-### Double Fetch
-Now we will exploit the double fetch bug.
-
+## Double Fetch
 This kind of bug happens when the user supplied data is fetched twice, for example, there is a ioctl that recives an array of
-chars and it length, if the function will once check the size and second will copy using it, the exact same reference to the variable.
-It exposes itself to the double-fetch bug.
+chars and its length, if the function will check the size and second will copy using it (the exact same reference to the variable).
+It will expose itself to the double-fetch bug.
 
-This is also called TOC-TOU TimeOfCheck and TimeOfUse, when you are fetching this value you are exposing yourself to that the user will be able to change this data between the check and acatual use thus the vulnerability.
+This is also called TOC-TOU, TimeOfCheck and TimeOfUse, when you are fetching this value for the second time you are exposing yourself to the fact that the user will be able to change this data between the check and acatual use thus the vulnerability.
 
 #### Analysing the binary
 We are interested in the function `TriggerDoubleFetch`.
