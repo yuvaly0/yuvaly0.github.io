@@ -18,7 +18,7 @@ There are references to the articles I used in the [git repo](https://github.com
 * [Double Fetch](https://yuvaly0.github.io/2020/09/15/hevd-writeups.html#double-fetch)
 
 ## Non Paged Pool Overflow
-This bug will occur when writing too much data to a buffer, in this case, the buffer is in the non paged pool.
+This bug will occur when writing data passed the end of a buffer, in this case, the buffer is in the non paged pool.
 
 For example, a function receives a buffer and just copies it to her buffer without checking its length.
 
@@ -27,11 +27,11 @@ We are interested in the function `TriggerNonPagedPoolOverflow`
 
 ![could not load photo](/assets/hevd-writeups/pool_overflow/1_function_analysis.png)
 
+First of all the function creates a chunk using the function [ExAllocatePoolWithTag](https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-exallocatepoolwithtag), the requested chunk is in size of 0x1f8, it's tag will be 'Hack' and it will be allocated in the non paged pool.
+
 ![2_function_analysis](/assets/hevd-writeups/pool_overflow/2_function_analysis.png)
 
-First of all the function creates a chunk using the function [ExAllocatePoolWithTag](https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-exallocatepoolwithtag), the requested chunk is in size of 0x1f8, it's tag will be 'Hack' (important) and it will be allocated in the non paged pool.
-
-We're given the information mentioned above and some on our sent buffer and size and the kernel buffer which is the chunk mentioned earlier.
+We're given the information mentioned above and some info on our sent buffer
 
 Next, they use `memcpy` to copy our buffer with our given size (the vulnerability) to their buffer without any size checking.
 
@@ -40,9 +40,9 @@ Lastly, they free the chunk.
 #### Explotation
 Our goal is to pop a cmd with system permissions
 
-1. Derandomize the pool (get to a predictable state) - heap spray
-2. Trigger the overflow and overwrite a shellcode address
-3. jump to shellcode and pop a cmd
+1. Derandomize the pool (get to a predictable state) - pool spray
+2. Trigger the overflow and overwrite an address with a shellcode address
+3. jump to the shellcode and pop a cmd
 
 We cant just the overwrite the buffer because it will mess up the pool structure and cause a BSOD:
 
@@ -52,37 +52,42 @@ We cant just the overwrite the buffer because it will mess up the pool structure
 
 
 ##### Derandomize the pool
-We will use a technique called heap spray.
-This technique is used to get the pool to a controlled state, because of its allocator mechanism this is possible.
+We will be using a technique called pool spray.</br>
+This technique is used to get the pool to a controlled state, this is possible because of its allocator mechanism.
 
-But with what objects? </br>
+But with what objects?
 
 We can use the event object, they are each sizeof 0x40, but if we will multiply by 8 will get 0x200 which is the size of our driver allocated chunk 0x1f8 (+ 0x8 for the _POOL_HEADER struct)
 
-![code for heap spray](/assets/hevd-writeups/pool_overflow/5_heap_spray_code.png)
-
-![handles](/assets/hevd-writeups/pool_overflow/6_handles.png)
-
-![predictable heap-windbg](/assets/hevd-writeups/pool_overflow/7_heap_spray_allocations.png)
+![code for pool spray](/assets/hevd-writeups/pool_overflow/5_pool_spray_code.png)
 
 The idea is that the first wave will derandomize and the second wave will start in a state where the pool is already derandomized.
 We could do it in one wave.
 
+![handles](/assets/hevd-writeups/pool_overflow/6_handles.png)
+
+Some handles address, so we could check the state with windbg
+
+![predictable heap-windbg](/assets/hevd-writeups/pool_overflow/7_heap_spray_allocations.png)
+
+We can see that because we freed 8 consecutive chunks, they became one big chunk in size of 0x200 (including the pool header)
+
 ##### Trigger Overflow
-The `TypeIndex` field in the _OBJECT_HEADER is an index to a table of pointers that will contain pointers to different OBJECT_TYPE types.
+The `TypeIndex` field in the _OBJECT_HEADER is an index to a table of pointers that will point to different OBJECT_TYPE types.
 
 ![show object header](/assets/hevd-writeups/pool_overflow/8_object_header.png)
 
-Inside this structure, there are a couple of pointers for functions, such as: `OkayToCloseProcedure`, `CloseProcedure`.
+Inside the OBJECT_TYPE, there are a couple of pointers for functions, such as: `OkayToCloseProcedure`, `CloseProcedure`.</br>
+See below
 
 ![show procedures](/assets/hevd-writeups/pool_overflow/10_procedures.png)
 
-So if we could overwrite the pointer to the table, causing it to point to another index in the table say - the first index (0) is pointed to null address, because we operating on windows 7 we can allocate a null page and simulate the OBJECT_TYPE there giving us the ability to control EIP
+So if we could overwrite the pointer to the table, causing it to point to another index in the table say - the first index, 0,  is a null pointer, because we are operating on windows 7 we can allocate a null page and simulate the OBJECT_TYPE struct there, giving us the ability to control EIP
 
 ![show table](/assets/hevd-writeups/pool_overflow/9_type_index_table.png)
 
 But we cannot just overwrite the object header with random or even some other chunk metadata because its unsafe.
-Because we know that we will overwrite an event object we can take one of our known headers, after all, we know all of them are the same (at least until the IndexType offset).
+Because we know that we will overwrite an `event object` we can take one of our known headers, after all, we know all of them are the same (at least until the Lock field offset, which is 0 anyway).
 ![view raw header data](/assets/hevd-writeups/pool_overflow/11_payload_data_colored.png)
 
 ##### Getting system
