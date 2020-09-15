@@ -5,6 +5,15 @@ modified: 2020-09-15 17:30:47 +07:00
 tags: [windows, kernel, hevd]
 ---
 
+## Intro
+
+This writeups do not aim to replace all of the existing good places already. 
+I wrote them so I could get deeper understanding of the vulnerabilities
+
+I've decided to write writeups only for the vulns that interested me the most.
+
+There are references to the articles I used in the [git repo](https://github.com/yuvaly0/HEVD_Solutions)
+
 * [Non Paged Pool Overflow](https://yuvaly0.github.io/2020/09/15/hevd-writeups.html#non-paged-pool-overflow)
 * [Double Fetch](https://yuvaly0.github.io/2020/09/15/hevd-writeups.html#double-fetch)
 
