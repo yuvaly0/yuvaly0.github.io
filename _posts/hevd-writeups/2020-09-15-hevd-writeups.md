@@ -5,6 +5,9 @@ modified: 2020-09-15 17:30:47 +07:00
 tags: [windows, kernel, hevd]
 ---
 
+* [Non Paged Pool Overflow](https://yuvaly0.github.io/2020/09/15/hevd-writeups.html#non-paged-pool-overflow)
+* [Double Fetch](https://yuvaly0.github.io/2020/09/15/hevd-writeups.html#double-fetch)
+
 ## Non Paged Pool Overflow
 This bug will occur when writing too much data to a buffer, in this case, the buffer is in the non paged pool.
 
@@ -14,6 +17,7 @@ For example, a function receives a buffer and just copies it to her buffer witho
 We are interested in the function `TriggerNonPagedPoolOverflow`
 
 ![could not load photo](/assets/hevd-writeups/pool_overflow/1_function_analysis.png)
+
 ![2_function_analysis](/assets/hevd-writeups/pool_overflow/2_function_analysis.png)
 
 First of all the function creates a chunk using the function [ExAllocatePoolWithTag](https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-exallocatepoolwithtag), the requested chunk is in size of 0x1f8, it's tag will be 'Hack' (important) and it will be allocated in the non paged pool.
@@ -34,6 +38,7 @@ Our goal is to pop a cmd with system permissions
 We cant just the overwrite the buffer because it will mess up the pool structure and cause a BSOD:
 
 ![code to cause BSOD visual studio](/assets/hevd-writeups/pool_overflow/3_cause_bsod.png)
+
 ![bsod - windbg](/assets/hevd-writeups/pool_overflow/4_bsod_windbg.png)
 
 
@@ -46,7 +51,9 @@ But with what objects? </br>
 We can use the event object, they are each sizeof 0x40, but if we will multiply by 8 will get 0x200 which is the size of our driver allocated chunk 0x1f8 (+ 0x8 for the _POOL_HEADER struct)
 
 ![code for heap spray](/assets/hevd-writeups/pool_overflow/5_heap_spray_code.png)
+
 ![handles](/assets/hevd-writeups/pool_overflow/6_handles.png)
+
 ![predictable heap-windbg](/assets/hevd-writeups/pool_overflow/7_heap_spray_allocations.png)
 
 The idea is that the first wave will derandomize and the second wave will start in a state where the pool is already derandomized.
