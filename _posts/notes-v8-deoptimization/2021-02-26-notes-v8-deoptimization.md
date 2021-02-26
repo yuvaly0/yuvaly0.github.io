@@ -1,5 +1,5 @@
 ---
-title: notes about v8 deoptimization
+title: Notes about v8 deoptimization
 date: 2021-02-26 17:30:47 +07:00
 modified: 2021-02-26 17:30:47 +07:00
 tags: [v8, deoptimization, simplified-lowering]
