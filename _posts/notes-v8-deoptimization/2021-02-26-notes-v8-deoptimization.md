@@ -5,8 +5,9 @@ modified: 2021-02-26 17:30:47 +07:00
 tags: [v8, deoptimization, simplified-lowering]
 ---
 
-Those are my raw notes that i wrote while reading and diving to [this article](https://doar-e.github.io/blog/2020/11/17/modern-attacks-on-the-chrome-browser-optimizations-and-deoptimizations/)
-I wanted people see the questions and thinking process for someone that started this article with zero to little knowledge about ignition source code or the simplified-lowering optimization.
+Those are my raw notes that i wrote while reading and diving to [this article](https://doar-e.github.io/blog/2020/11/17/modern-attacks-on-the-chrome-browser-optimizations-and-deoptimizations/).
+
+I wanted people to see the questions and thinking process for someone that started this article with zero to little knowledge about ignition source code or the simplified-lowering optimization.
 
 ofcourse if you see a mistake i'd be happy to fix it :)
 
@@ -59,9 +60,10 @@ learn more about the csa-builtins - the Label, BIND thing there.
 you can control the value of the accumulator by changing the order, 'y + 1n' != '1n + y'.
 
 by what order does the bind branches are checked?
+
 number != bigint -- https://v8.dev/blog/react-cliff
 
--- bug specific --
+## bug specific
 there was a mistake in the translation to the output frame, inside 'AddTranslationForOperand we
 check for kInt64 constants and because of 'DeoptMachineTypeOf' of 'BigInt' the machine type returned is 'AnyTagged' which caused
 the translation to think that the value is an address instead of raw number.
@@ -75,14 +77,14 @@ looks like when we try to 'y / 1n' the exploit does not work, should compare byt
 when i look at the source it looks like it's the same for both, the branch itself is different but in the end they are both loaded with 'LoadHeapNumberValue'
 looked at different bytecode handler, next time first look at the --print-bytecode instead of assuming it's the same, the correct handler is 'Add' instead of 'SmiAdd'
 
--- questions --
+## questions
 1. why does the number must be in the range of 49 bits?
 2. declaration of the 'a' variable?
 3. why do we need the try catch? we dont throw an exception, we only deoptimize
 4. why do we need the param we get
 5. why only the first time of the xpl works? second, etc' returns the address as decimal.
 
--- answers --
+## answers
 1. the fraction size is 52 bits in IEEE-754 representation, something else.
    maybe related to the process addr space, only 49 are used?
    we first need to look at the docs, what is this param to 'asUintN', the param is used for setting the max number we can store inside the 'bigint' object, look at the example in the docs
@@ -100,5 +102,5 @@ looked at different bytecode handler, next time first look at the --print-byteco
    
    in the second poc we deoptimize because of 'wrong name' (see different deopt reasons in deoptimize-reason.h) we just need to call it with a different param we
 
--- Understand better --
-the steps of the simplified lowering, such as the truncation, propagation and lowering - read the source file, simplified-lowering.cc
+## Understand better
+the steps of the simplified lowering, such as the truncation, propagation and lowering - read the source file, [simplified-lowering.cc](https://chromium.googlesource.com/external/v8/+/cb1b554a837bb47ec718c1542d462cb2ac2aa0fd/src/compiler/simplified-lowering.cc#35)
