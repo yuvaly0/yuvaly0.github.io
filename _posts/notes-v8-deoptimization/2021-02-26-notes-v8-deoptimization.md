@@ -16,28 +16,27 @@ of course, if you see a mistake I'd be happy to fix it :)
 deoptimization input data -> to know what kind of deoptimization is to be done, where are we going back?
 what kind of frame should we build, where to deoptimize (offset of bytecode) 
 
-deoptimization types:
-eager: triggered type guard - code that has invalidated itself
-lazy: optimized code that has been invalidated by the execution of other code
-soft: normal, the function was optimized too early
+deoptimization types:</br>
+	eager: triggered type guard - code that has invalidated itself</br>
+	lazy: optimized code that has been invalidated by the execution of other code</br>
+	soft: normal, the function was optimized too early</br>
 
-dependencies in the context of deoptimization:
-	installing code dependencies on a global variable, all code obj that depend on this var will be deopt once it is mutated
-	it knows only when we check for the 'if' statement if we changed the global var
+dependencies in the context of deoptimization:</br>
+	installing code dependencies on a global variable, all code obj that depend on this var will be deopt once it is mutated</br>
+	it knows only when we check for the 'if' statement if we changed the global var</br>
 
-the UseInfo class is used to describe a use of an input of a node. => AnyTagged: any - Truncation, tagged - UseInfo
-Truncation means how can I make this more specific kind
-machine representation is like 'useInfo' but more specific, e.g  'kWord64' instead of 'Tagged'
+the UseInfo class is used to describe a use of an input of a node. => AnyTagged: any - Truncation, tagged - UseInfo</br>
+Truncation means how can I make this more specific kind</br>
+machine representation is like 'useInfo' but more specific, e.g  'kWord64' instead of 'Tagged'</br>
 
-ProcessInput -> u can actually see the type for the input params -> UseInfo
-SetOutput -> sets the output type for the specified node
+ProcessInput -> u can actually see the type for the input params -> UseInfo</br>
+SetOutput -> sets the output type for the specified node</br>
 
-what's 'restriction type'? -> maybe what type could be input? like some kind of mechanism to restrict what input we can get
-machineType -> simplifies version of machineRepresentation
+what's 'restriction type'? -> maybe what type could be input? like some kind of mechanism to restrict what input we can get</br>
+machineType -> simplifies version of machineRepresentation</br>
 
 for every instr that could cause deopt, we have a block called frameStateDescriptor to give us information about the deopt
-now, it is using 'Translation' to get info of the output frame, this is
-input frame -> output frame.
+now, it is using 'Translation' to get info of the output frame, this is input frame -> output frame.</br>
 the StateValueList is a list of `StateValueDescriptor`, those are the inputs of the frameState,
 and u can link them to the var's job at the `Translation`.
 
