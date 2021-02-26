@@ -85,8 +85,8 @@ looked at different bytecode handler, next time first look at the --print-byteco
 5. why only the first time of the xpl works? second, etc' returns the address as decimal.
 
 ## answers
-1. the fraction size is 52 bits in IEEE-754 representation, something else.
-   maybe related to the process addr space, only 49 are used?
+1. the fraction size is 52 bits in IEEE-754 representation, something else.</br>
+   maybe related to the process addr space, only 49 are used?</br>
    we first need to look at the docs, what is this param to 'asUintN', the param is used for setting the max number we can store inside the 'bigint' object, look at the example in the docs
    based on that, doesnt seem to have any special meaning to this number besides setting a limit on the size of the address
    
@@ -97,10 +97,9 @@ looked at different bytecode handler, next time first look at the --print-byteco
 
 4. we dont need, ok to remove.
 
-5. i think we dont deopt in the second time, need to check, yes!
-   the reason we deopt is 'Insufficent type feedback for binary operation' when we run it enough times we wont get it again because we will have enough type information
-   
-   in the second poc we deoptimize because of 'wrong name' (see different deopt reasons in deoptimize-reason.h) we just need to call it with a different param we
+5. i think we dont deopt in the second time, need to check, yes!</br>
+   the reason we deopt is 'Insufficent type feedback for binary operation' when we run it enough times we wont get it again because we will have enough type information</br>
+   in the second poc we deoptimize because of 'wrong name' (see different deopt reasons in [deoptimize-reason.h](https://chromium.googlesource.com/v8/v8/+/roll/src/deoptimize-reason.h)) we just need to call it with a different param we
 
 ## Understand better
 the steps of the simplified lowering, such as the truncation, propagation and lowering - read the source file, [simplified-lowering.cc](https://chromium.googlesource.com/external/v8/+/cb1b554a837bb47ec718c1542d462cb2ac2aa0fd/src/compiler/simplified-lowering.cc#35)
