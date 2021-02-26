@@ -4,7 +4,9 @@ permalink: /about/
 layout: page
 ---
 
-Its not over until I win
+20 y/o from israel,
+interested mostly in pwn and reversing, 
+currently learning v8 explotation
 
 ##### may u needs ✨
 
