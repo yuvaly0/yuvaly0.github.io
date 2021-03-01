@@ -16,27 +16,27 @@ of course, if you see a mistake I'd be happy to fix it :)
 deoptimization input data -> to know what kind of deoptimization is to be done, where are we going back?
 what kind of frame should we build, where to deoptimize (offset of bytecode) 
 
-deoptimization types:</br>
-	eager: triggered type guard - code that has invalidated itself</br>
-	lazy: optimized code that has been invalidated by the execution of other code</br>
-	soft: normal, the function was optimized too early</br>
+deoptimization types:<br/>
+	eager: triggered type guard - code that has invalidated itself <br/>
+	lazy: optimized code that has been invalidated by the execution of other code <br/>
+	soft: normal, the function was optimized too early <br/>
 
-dependencies in the context of deoptimization:</br>
-	installing code dependencies on a global variable, all code obj that depend on this var will be deopt once it is mutated</br>
-	it knows only when we check for the 'if' statement if we changed the global var</br>
+dependencies in the context of deoptimization:<br/>
+	installing code dependencies on a global variable, all code obj that depend on this var will be deopt once it is mutated<br/>
+	it knows only when we check for the 'if' statement if we changed the global var<br/>
 
-the UseInfo class is used to describe a use of an input of a node. => AnyTagged: any - Truncation, tagged - UseInfo</br>
-Truncation means how can I make this more specific kind</br>
-machine representation is like 'useInfo' but more specific, e.g  'kWord64' instead of 'Tagged'</br>
+the UseInfo class is used to describe a use of an input of a node. => AnyTagged: any - Truncation, tagged - UseInfo<br/>
+Truncation means how can I make this more specific kind<br/>
+machine representation is like 'useInfo' but more specific, e.g  'kWord64' instead of 'Tagged'<br/>
 
-ProcessInput -> u can actually see the type for the input params -> UseInfo</br>
-SetOutput -> sets the output type for the specified node</br>
+ProcessInput -> u can actually see the type for the input params -> UseInfo<br/>
+SetOutput -> sets the output type for the specified node<br/>
 
-what's 'restriction type'? -> maybe what type could be input? like some kind of mechanism to restrict what input we can get</br>
-machineType -> simplifies version of machineRepresentation</br>
+what's 'restriction type'? -> maybe what type could be input? like some kind of mechanism to restrict what input we can get<br/>
+machineType -> simplifies version of machineRepresentation<br/>
 
 for every instr that could cause deopt, we have a block called frameStateDescriptor to give us information about the deopt
-now, it is using 'Translation' to get info of the output frame, this is input frame -> output frame.</br>
+now, it is using 'Translation' to get info of the output frame, this is input frame -> output frame.<br/>
 the StateValueList is a list of `StateValueDescriptor`, those are the inputs of the frameState,
 and u can link them to the var's job at the `Translation`.
 
@@ -84,8 +84,8 @@ looked at different bytecode handler, next time first look at the --print-byteco
 5. why only the first time the POC works? second, etc' returns the address as a decimal.
 
 ## answers
-1. the fraction size is 52 bits in IEEE-754 representation, something else.</br>
-   maybe related to the process address space, only 49 are used?</br>
+1. the fraction size is 52 bits in IEEE-754 representation, something else.<br/>
+   maybe related to the process address space, only 49 are used?<br/>
    we first need to look at the docs, what is this param to 'asUintN', the param is used for setting the max number we can store inside the 'bigint' object, look at the example in the docs
    based on that, doesn't seem to have any special meaning to this number besides setting a limit on the size of the address
    
@@ -96,8 +96,8 @@ looked at different bytecode handler, next time first look at the --print-byteco
 
 4. we don't need it, ok to remove it.
 
-5. I think we don't deopt in the second time, need to check, yes!</br>
-   the reason we deopt is 'Insufficient type feedback for binary operation' when we run it enough times we won't get it again because we will have enough type information</br>
+5. I think we don't deopt in the second time, need to check, yes!<br/>
+   the reason we deopt is 'Insufficient type feedback for binary operation' when we run it enough times we won't get it again because we will have enough type information<br/>
    in the second POC we deoptimize because of 'wrong name' (see different deopt reasons in [deoptimize-reason.h](https://chromium.googlesource.com/v8/v8/+/roll/src/deoptimize-reason.h)) we just need to call it with a different param we
 
 ## Understand better
